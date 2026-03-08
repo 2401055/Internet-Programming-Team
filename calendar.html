@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - FCAI Student Activities Repository</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/calendar.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SAR</h2>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Book Event</a></li>
+                    <li><a href="history.html"><i class="fas fa-history"></i> Event History</a></li>
+                    <li class="active"><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span>Dark Mode</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Event Calendar</h1>
+                <p>View and manage upcoming events</p>
+            </header>
+
+            <section class="calendar-section">
+                <div class="calendar-controls">
+                    <button id="prev-month" class="calendar-nav">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h2 id="current-month">March 2024</h2>
+                    <button id="next-month" class="calendar-nav">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="calendar-view">
+                    <div class="calendar-header">
+                        <div>Sun</div>
+                        <div>Mon</div>
+                        <div>Tue</div>
+                        <div>Wed</div>
+                        <div>Thu</div>
+                        <div>Fri</div>
+                        <div>Sat</div>
+                    </div>
+                    <div id="calendar-grid" class="calendar-grid">
+                        <!-- Calendar days will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="event-list">
+                    <h3>Upcoming Events</h3>
+                    <div id="upcoming-events" class="upcoming-events">
+                        <!-- Upcoming events will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/calendar.js"></script>
+</body>
+</html> 

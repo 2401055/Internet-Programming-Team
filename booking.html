@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Event - FCAI Student Activities Repository</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/forms.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SAR</h2>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li class="active"><a href="booking.html"><i class="fas fa-calendar-check"></i> Book Event</a></li>
+                    <li><a href="history.html"><i class="fas fa-history"></i> Event History</a></li>
+                    <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span>Dark Mode</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Book an Event</h1>
+                <p>Fill out the form below to book your event</p>
+            </header>
+
+            <section class="form-section">
+                <form id="booking-form" class="modern-form">
+                    <div class="form-group">
+                        <label for="event-name">Event Name</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-heading"></i>
+                            <input type="text" id="event-name" name="event-name" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-type">Event Type</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-tag"></i>
+                            <select id="event-type" name="event-type" required>
+                                <option value="">Select Event Type</option>
+                                <option value="workshop">Workshop</option>
+                                <option value="seminar">Seminar</option>
+                                <option value="conference">Conference</option>
+                                <option value="competition">Competition</option>
+                                <option value="social">Social Event</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-date">Event Date</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-calendar"></i>
+                            <input type="date" id="event-date" name="event-date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-time">Event Time</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-clock"></i>
+                            <input type="time" id="event-time" name="event-time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="event-location">Event Location</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <select id="event-location" name="event-location" required>
+                                <option value="">Select Location</option>
+                                <option value="auditorium">Main Auditorium</option>
+                                <option value="hall1">Conference Hall 1</option>
+                                <option value="hall2">Conference Hall 2</option>
+                                <option value="lab1">Computer Lab 1</option>
+                                <option value="lab2">Computer Lab 2</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expected-audience">Expected Audience</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-users"></i>
+                            <input type="number" id="expected-audience" name="expected-audience" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resources">Required Resources</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-tools"></i>
+                            <textarea id="resources" name="resources" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Event Description</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-align-left"></i>
+                            <textarea id="description" name="description" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="#">Event Booking Terms</a></label>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <i class="fas fa-calendar-check"></i> Book Event
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/forms.js"></script>
+</body>
+</html> 

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event History - FCAI Student Activities Repository</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/history.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SAR</h2>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Book Event</a></li>
+                    <li class="active"><a href="history.html"><i class="fas fa-history"></i> Event History</a></li>
+                    <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span>Dark Mode</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Event History</h1>
+                <p>Browse through past events and access their materials</p>
+            </header>
+
+            <section class="search-section">
+                <div class="search-container">
+                    <div class="input-with-icon">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Search events...">
+                    </div>
+                    <div class="filter-container">
+                        <select id="event-type-filter">
+                            <option value="">All Event Types</option>
+                            <option value="workshop">Workshop</option>
+                            <option value="seminar">Seminar</option>
+                            <option value="conference">Conference</option>
+                            <option value="competition">Competition</option>
+                            <option value="social">Social Event</option>
+                        </select>
+                        <select id="date-filter">
+                            <option value="">All Dates</option>
+                            <option value="week">Last Week</option>
+                            <option value="month">Last Month</option>
+                            <option value="year">Last Year</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <section class="events-section">
+                <div class="events-grid">
+                    <!-- Event Card 1 -->
+                    <div class="event-card">
+                        <div class="event-header">
+                            <span class="event-type workshop">Workshop</span>
+                            <span class="event-date">2024-03-15</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Web Development Workshop</h3>
+                            <p>Learn the fundamentals of modern web development</p>
+                            <div class="event-materials">
+                                <h4>Materials</h4>
+                                <ul>
+                                    <li><a href="#"><i class="fas fa-file-pdf"></i> Presentation Slides</a></li>
+                                    <li><a href="#"><i class="fas fa-file-code"></i> Code Examples</a></li>
+                                    <li><a href="#"><i class="fas fa-video"></i> Recording</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 2 -->
+                    <div class="event-card">
+                        <div class="event-header">
+                            <span class="event-type seminar">Seminar</span>
+                            <span class="event-date">2024-03-10</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>AI in Modern Applications</h3>
+                            <p>Exploring the impact of AI in today's technology</p>
+                            <div class="event-materials">
+                                <h4>Materials</h4>
+                                <ul>
+                                    <li><a href="#"><i class="fas fa-file-pdf"></i> Research Paper</a></li>
+                                    <li><a href="#"><i class="fas fa-file-image"></i> Case Studies</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Card 3 -->
+                    <div class="event-card">
+                        <div class="event-header">
+                            <span class="event-type competition">Competition</span>
+                            <span class="event-date">2024-03-05</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Hackathon 2024</h3>
+                            <p>Annual coding competition for students</p>
+                            <div class="event-materials">
+                                <h4>Materials</h4>
+                                <ul>
+                                    <li><a href="#"><i class="fas fa-file-pdf"></i> Problem Statements</a></li>
+                                    <li><a href="#"><i class="fas fa-file-code"></i> Solution Templates</a></li>
+                                    <li><a href="#"><i class="fas fa-images"></i> Event Photos</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html> 

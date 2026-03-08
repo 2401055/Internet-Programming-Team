@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - FCAI Student Activities Repository (SAR)</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .contact-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        .contact-info {
+            flex: 1 1 300px;
+            min-width: 260px;
+        }
+        .contact-info h2 {
+            margin-bottom: 1.5rem;
+        }
+        .contact-info ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+        }
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 1.08rem;
+        }
+        .contact-info li i {
+            color: #13c1a5;
+            margin-right: 0.8rem;
+            font-size: 1.3rem;
+            min-width: 24px;
+        }
+        .contact-info .social-links {
+            display: flex;
+            gap: 0.7rem;
+        }
+        .contact-info .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #eaf6f6;
+            color: #13c1a5;
+            font-size: 1.2rem;
+            transition: background 0.2s, color 0.2s;
+        }
+        .contact-info .social-links a:hover {
+            background: #13c1a5;
+            color: #fff;
+        }
+        .contact-form-section {
+            flex: 1 1 340px;
+            min-width: 280px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 2rem 1.5rem;
+        }
+        .contact-form-section h3 {
+            margin-bottom: 1.2rem;
+        }
+        .contact-form label {
+            font-weight: 500;
+        }
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-top: 0.3rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        .contact-form textarea {
+            resize: vertical;
+        }
+        .contact-form .cta-button {
+            width: 100%;
+            background: #4a6bff;
+            color: #fff;
+            font-size: 1.1rem;
+            border: none;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 6px rgba(74,107,255,0.08);
+        }
+        .contact-form .cta-button:hover, .contact-form .cta-button:focus {
+            background: #3752c6;
+            color: #fff;
+        }
+        .contact-form .cta-button:active {
+            background: #2a3e99;
+        }
+        @media (max-width: 900px) {
+            .contact-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .contact-form-section {
+                padding: 1.2rem 0.5rem;
+            }
+        }
+        /* Dark mode styles */
+        [data-theme="dark"] .contact-container {
+            background: #23272f;
+        }
+        [data-theme="dark"] .contact-info h2,
+        [data-theme="dark"] .contact-info ul,
+        [data-theme="dark"] .contact-info li,
+        [data-theme="dark"] .contact-info strong {
+            color: #fff;
+        }
+        [data-theme="dark"] .contact-info li i {
+            color: #6c8eff;
+        }
+        [data-theme="dark"] .contact-info .social-links a {
+            background: #2d2d2d;
+            color: #6c8eff;
+        }
+        [data-theme="dark"] .contact-info .social-links a:hover {
+            background: #6c8eff;
+            color: #fff;
+        }
+        [data-theme="dark"] .contact-form-section {
+            background: #181a20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+        }
+        [data-theme="dark"] .contact-form label {
+            color: #fff;
+        }
+        [data-theme="dark"] .contact-form input,
+        [data-theme="dark"] .contact-form textarea {
+            background: #23272f;
+            color: #fff;
+            border: 1px solid #444b5d;
+        }
+        [data-theme="dark"] .contact-form input::placeholder,
+        [data-theme="dark"] .contact-form textarea::placeholder {
+            color: #b0b8c9;
+        }
+        [data-theme="dark"] .contact-form .cta-button {
+            background: #6c8eff;
+            color: #fff;
+        }
+        [data-theme="dark"] .contact-form .cta-button:hover,
+        [data-theme="dark"] .contact-form .cta-button:focus {
+            background: #4a6bff;
+        }
+        [data-theme="dark"] .contact-form .cta-button:active {
+            background: #3752c6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>SAR</h2>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
+                    <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Book Event</a></li>
+                    <li><a href="history.html"><i class="fas fa-history"></i> Event History</a></li>
+                    <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+                    <li class="active"><a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider round"></div>
+                    </label>
+                    <span>Dark Mode</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="main-header">
+                <h1>Contact Us</h1>
+            </header>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Contact Us</h2>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:Administrator@rst.edu.eg" style="color:#13c1a5; text-decoration:underline;">Administrator@rst.edu.eg</a></li>
+                        <li><i class="fas fa-phone"></i> +20 123 456 7890</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Address: RST University for Science & Technology, RST Campus</li>
+                        <li><i class="fas fa-clock"></i> Office Hours: Monday – Friday, 9:00 AM - 4:00 PM</li>
+                    </ul>
+                    <div style="margin-top:1.5rem;">
+                        <strong>Follow Us</strong>
+                        <div class="social-links" style="margin-top:0.7rem;">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-section">
+                    <h3>Send us a Message</h3>
+                    <form class="contact-form">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" placeholder="Your name" required>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" placeholder="Your email" required>
+                        <label for="subject">Subject:</label>
+                        <input type="text" id="subject" name="subject" placeholder="Message subject" required>
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Your message" required></textarea>
+                        <button type="submit" class="cta-button">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+
+    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3307.324618335711!2d30.488938999999995!3d30.385925!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1458bf37d0fdedcf%3A0x14cf6dc132ccde6c!2z2KzYp9mF2LnYqSDYp9mE2LHZitin2K_ZhyDZhNmE2LnZhNmI2YUg2YjYp9mE2KrZg9mG2YjZhNmI2KzZitin!5e1!3m2!1sen!2seg!4v1747303204303!5m2!1sen!2seg" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</body>
+</html> 
