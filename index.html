@@ -3,83 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FCAI Student Activities Repository (SAR)</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Signal Visualization Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-    <div class="container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="sidebar-header">
-                <h2>SAR</h2>
-                <button id="sidebar-toggle" class="sidebar-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
+<body class="dark">
+    <div class="grid-background"></div>
+    
+    <header>
+        <div class="container">
+            <h1 class="glow-text">Signal Visualization Platform</h1>
+            <p>Digital Signal Processing (DSP) Visualization Tool for Engineering Students</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="tabs">
+            <div class="tabs-list">
+                <button class="tab-trigger active" data-tab="visualizer">Signal Visualizer</button>
+                <button class="tab-trigger" data-tab="playground">Playground</button>
+                <button class="tab-trigger" data-tab="experiments">DSP Experiments</button>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="active"><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
-                    <li><a href="register.html"><i class="fas fa-user-plus"></i> Register</a></li>
-                    <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Book Event</a></li>
-                    <li><a href="history.html"><i class="fas fa-history"></i> Event History</a></li>
-                    <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
-                    <li><a href="contact.html"><i class="fas fa-envelope"></i> Contact Us</a></li>
-                </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <div class="theme-switch-wrapper">
-                    <label class="theme-switch" for="checkbox">
-                        <input type="checkbox" id="checkbox" />
-                        <div class="slider round"></div>
-                    </label>
-                    <span>Dark Mode</span>
+
+            <!-- Signal Visualizer Tab -->
+            <div class="tab-content active" id="visualizer">
+                <div class="grid-layout">
+                    <section class="controls card">
+                        <h2>Signal Controls</h2>
+                        <div class="control-group">
+                            <label>Signal Type</label>
+                            <div class="button-group" id="signal-type-group">
+                                <button class="btn active" data-type="sine">Sine</button>
+                                <button class="btn" data-type="square">Square</button>
+                                <button class="btn" data-type="triangle">Triangle</button>
+                                <button class="btn" data-type="noise">Noise</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Frequency</label>
+                                <span id="freq-val">5.0 Hz</span>
+                            </div>
+                            <input type="range" id="freq-slider" min="0.5" max="50" step="0.1" value="5">
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Amplitude</label>
+                                <span id="amp-val">1.00</span>
+                            </div>
+                            <input type="range" id="amp-slider" min="0.1" max="2" step="0.1" value="1">
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Phase Shift</label>
+                                <span id="phase-val">0.00 rad</span>
+                            </div>
+                            <input type="range" id="phase-slider" min="0" max="6.28" step="0.1" value="0">
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Sampling Rate</label>
+                                <span id="sr-val">1000 Hz</span>
+                            </div>
+                            <input type="range" id="sr-slider" min="100" max="5000" step="100" value="1000">
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Noise Level</label>
+                                <span id="noise-val">0%</span>
+                            </div>
+                            <input type="range" id="noise-slider" min="0" max="0.5" step="0.01" value="0">
+                        </div>
+                        <div class="control-group">
+                            <label>DSP Filter</label>
+                            <div class="button-group" id="filter-type-group">
+                                <button class="btn active" data-filter="none">No Filter</button>
+                                <button class="btn" data-filter="lowpass">Lowpass</button>
+                                <button class="btn" data-filter="highpass">Highpass</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="visualization">
+                        <div class="sub-tabs">
+                            <div class="sub-tabs-list">
+                                <button class="sub-tab-trigger active" data-subtab="time">Time Domain</button>
+                                <button class="sub-tab-trigger" data-subtab="frequency">Frequency Domain (FFT)</button>
+                            </div>
+                            <div class="sub-tab-content active" id="time-view">
+                                <div class="chart-container card">
+                                    <h3>Time Domain Signal</h3>
+                                    <canvas id="timeChart"></canvas>
+                                    <p class="chart-legend">Green: Original signal | Orange: Filtered signal</p>
+                                </div>
+                            </div>
+                            <div class="sub-tab-content" id="frequency-view">
+                                <div class="chart-container card">
+                                    <h3>Frequency Domain (FFT)</h3>
+                                    <canvas id="freqChart"></canvas>
+                                    <p class="chart-legend">Cyan: Frequency spectrum (dB scale)</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-panel card" id="analysis-panel">
+                            <h3>Signal Analysis</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">Peak Amplitude</span>
+                                    <span class="stat-value" id="stat-peak">0.00</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">RMS Value</span>
+                                    <span class="stat-value" id="stat-rms">0.00</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Mean</span>
+                                    <span class="stat-value" id="stat-mean">0.00</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Crest Factor</span>
+                                    <span class="stat-value" id="stat-crest">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Playground Tab -->
+            <div class="tab-content" id="playground">
+                <div class="playground-container card">
+                    <h2>Signal Playground</h2>
+                    <div class="canvas-wrapper">
+                        <canvas id="playgroundCanvas" width="800" height="300"></canvas>
+                    </div>
+                    <div class="playground-controls">
+                        <div class="control-group">
+                            <label>Signal Type</label>
+                            <div class="button-group" id="pg-type-group">
+                                <button class="btn active" data-type="sine">Sine</button>
+                                <button class="btn" data-type="square">Square</button>
+                                <button class="btn" data-type="triangle">Triangle</button>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Frequency</label>
+                                <span id="pg-freq-val">5.0 Hz</span>
+                            </div>
+                            <input type="range" id="pg-freq-slider" min="0.5" max="50" step="0.1" value="5">
+                        </div>
+                        <div class="control-group">
+                            <div class="label-row">
+                                <label>Amplitude</label>
+                                <span id="pg-amp-val">1.00</span>
+                            </div>
+                            <input type="range" id="pg-amp-slider" min="0.1" max="2" step="0.1" value="1">
+                        </div>
+                        <div class="action-buttons">
+                            <button id="pg-play-btn" class="btn primary">▶ Play</button>
+                            <button id="pg-reset-btn" class="btn">⟲ Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DSP Experiments Tab -->
+            <div class="tab-content" id="experiments">
+                <div class="experiments-container card">
+                    <h2>DSP Experiments</h2>
+                    <div class="exp-tabs">
+                        <div class="exp-tabs-list">
+                            <button class="exp-tab-trigger active" data-exptab="convolution">Convolution</button>
+                            <button class="exp-tab-trigger" data-exptab="kernels">Kernel Design</button>
+                        </div>
+                        <div class="exp-tab-content active" id="convolution-view">
+                            <div class="exp-layout">
+                                <div class="exp-controls">
+                                    <div class="control-group">
+                                        <label>Select Kernel</label>
+                                        <div class="kernel-grid" id="kernel-selector">
+                                            <button class="btn active" data-kernel="Gaussian Blur">Gaussian Blur</button>
+                                            <button class="btn" data-kernel="Edge Detection">Edge Detection</button>
+                                            <button class="btn" data-kernel="Smoothing">Smoothing</button>
+                                            <button class="btn" data-kernel="Sharpening">Sharpening</button>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <div class="label-row">
+                                            <label>Kernel Scale</label>
+                                            <span id="kernel-scale-val">1.00</span>
+                                        </div>
+                                        <input type="range" id="kernel-scale-slider" min="0.1" max="3" step="0.1" value="1">
+                                    </div>
+                                    <div class="current-kernel card">
+                                        <h3 id="kernel-name">Gaussian Blur</h3>
+                                        <div class="kernel-values" id="kernel-values-display"></div>
+                                    </div>
+                                </div>
+                                <div class="exp-visualization">
+                                    <div class="chart-container">
+                                        <h3>Convolution Result</h3>
+                                        <canvas id="convChart"></canvas>
+                                        <p class="chart-legend">Green: Original signal | Cyan: Convolved signal</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="exp-tab-content" id="kernels-view">
+                            <div class="info-grid">
+                                <div class="info-card card">
+                                    <h3>Kernel Information</h3>
+                                    <p><strong>Gaussian Blur:</strong> Smooths signal by averaging neighboring values with Gaussian weights.</p>
+                                    <p><strong>Edge Detection:</strong> Highlights rapid changes in the signal (high-pass effect).</p>
+                                    <p><strong>Smoothing:</strong> Simple moving average filter for noise reduction.</p>
+                                    <p><strong>Sharpening:</strong> Enhances high-frequency components and edges.</p>
+                                </div>
+                                <div class="info-card card">
+                                    <h3>Convolution Basics</h3>
+                                    <p>Convolution combines two signals to produce a third signal that represents how one signal modifies the other.</p>
+                                    <p>The kernel (filter) is applied to each point in the signal, computing a weighted sum of neighboring values.</p>
+                                    <p class="formula">y[n] = Σ h[k] * x[n-k]</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <header class="main-header">
-                <h1>Welcome to FCAI Student Activities Repository</h1>
-                <div style="margin-top: 1.2rem; text-align: center;">
-                    <img src="OIP.jpeg" alt="RST University Logo" style="width:130px; max-width:100%; height:auto; display:inline-block;" />
-                </div>
-            </header>
+    <footer>
+        <div class="container">
+            <p>Signal Visualization Platform • Real-time DSP Analysis • Time & Frequency Domain Visualization</p>
+            <p class="sub-footer">Oscilloscope Noir Design • Phosphor Green Aesthetics • Engineering-Grade Visualization</p>
+        </div>
+    </footer>
 
-            <section class="hero-section">
-                <div class="hero-content">
-                    <h2>Empowering Student Activities at RST</h2>
-                    <p>Discover, book, and manage student activities and events at Al-Ryada University for Science & Technology</p>
-                    <a href="register.html" class="cta-button">Get Started</a>
-                </div>
-            </section>
-
-            <section class="features-section">
-                <div class="feature-card">
-                    <i class="fas fa-calendar-check"></i>
-                    <h3>Event Booking</h3>
-                    <p>Book and manage your events with ease</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-history"></i>
-                    <h3>Event History</h3>
-                    <p>Access past events and their materials</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-calendar-alt"></i>
-                    <h3>Calendar</h3>
-                    <p>View all upcoming events</p>
-                </div>
-            </section>
-
-            <section class="about-section">
-                <h2>About SAR</h2>
-                <p>The Student Activities Repository (SAR) is a comprehensive platform designed to enhance student engagement and activity management at Al-Ryada University for Science & Technology. Our platform provides a seamless experience for booking events, accessing event materials, and staying updated with the university's activities.</p>
-            </section>
-        </main>
-    </div>
-
-    <script src="js/main.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
-</html> 
+</html>
