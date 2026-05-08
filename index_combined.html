@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RST Library</title>
+  <style>
+    /* ========= إعدادات عامة ========= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      padding-top: 70px; /* مساحة للشريط العلوي الثابت */
+    }
+
+    /* صفحات المصادقة لا تحتاج مساحة علوية */
+    body.auth-page {
+      padding-top: 0;
+    }
+
+    /* ========= شريط التنقل الثابت ========= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #1a237e;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .nav-brand {
+      font-size: 1.5em;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #ffd54f;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    #usernameDisplay {
+      font-weight: 600;
+    }
+
+    .btn-logout {
+      background-color: #e53935;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-logout:hover {
+      background-color: #c62828;
+    }
+
+    /* ========= شريط البحث العام ========= */
+    .search-bar-container {
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      display: flex;
+      gap: 10px;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 16px;
+    }
+
+    .btn-search {
+      padding: 10px 20px;
+      background-color: #1a237e;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-search:hover {
+      background-color: #283593;
+    }
+
+    /* ========= الحاوية الرئيسية ========= */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 20px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    h2, h3 {
+      color: #1a237e;
+      margin-bottom: 15px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    /* ========= شبكة الكتب ========= */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .book-card {
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+      text-align: center;
+      padding: 15px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .book-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .book-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      background-color: #e0e0e0;
+    }
+
+    .book-card h4 {
+      font-size: 16px;
+      margin-bottom: 5px;
+      color: #1a237e;
+    }
+
+    .book-card p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+
+    .btn-fav, .btn-remove-fav {
+      padding: 8px 12px;
+      background-color: #1a237e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: auto;
+      transition: background 0.2s;
+    }
+
+    .btn-fav:hover {
+      background-color: #283593;
+    }
+
+    .btn-remove-fav {
+      background-color: #e53935;
+    }
+
+    .btn-remove-fav:hover {
+      background-color: #c62828;
+    }
+
+    /* ========= شبكة الأحداث ========= */
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .event-card {
+      background: #f9f9f9;
+      border-left: 5px solid #1a237e;
+      padding: 20px;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .event-card h4 {
+      margin-bottom: 8px;
+      color: #1a237e;
+    }
+
+    .event-card p {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #555;
+    }
+
+    .btn-register {
+      background-color: #1a237e;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-register:hover {
+      background-color: #283593;
+    }
+
+    /* ========= فلتر الفئة ========= */
+    .filter-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-container label {
+      font-weight: 600;
+      color: #1a237e;
+    }
+
+    .form-select {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    /* ========= صفحات المصادقة ========= */
+    .auth-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #1a237e;
+    }
+
+    .auth-box {
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+
+    .auth-box h1 {
+      color: #1a237e;
+      margin-bottom: 5px;
+    }
+
+    .auth-box h2 {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background-color: #1a237e;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: #283593;
+    }
+
+    .auth-link {
+      margin-top: 15px;
+      color: #555;
+    }
+
+    .auth-link a {
+      color: #1a237e;
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* ========= صفحة الشكاوى ========= */
+    .complaint-page form {
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .contact-info {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    .contact-info h3 {
+      margin-bottom: 10px;
+    }
+
+    /* ========= استجابة للأجهزة الصغيرة ========= */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        padding: 15px;
+      }
+      .nav-links {
+        margin-top: 10px;
+        gap: 15px;
+      }
+      .search-bar-container {
+        flex-direction: column;
+      }
+      .book-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      }
+    }
+
+    /* ========= SPA View Management ========= */
+    .page-view {
+      display: none;
+    }
+    .page-view.active {
+      display: block;
+    }
+    #app-shell {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Authentication Views -->
+  <div id="loginView" class="page-view auth-page">
+    <div class="auth-container">
+      <div class="auth-box">
+        <h1>RST Library</h1>
+        <h2>Login</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn-primary">Login</button>
+        </form>
+        <p class="auth-link">Don't have an account? <a onclick="showPage('registerView')">Register here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="registerView" class="page-view auth-page">
+    <div class="auth-container">
+      <div class="auth-box">
+        <h1>RST Library</h1>
+        <h2>Register</h2>
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" placeholder="Full Name" required>
+          </div>
+          <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="Email" required>
+          </div>
+          <div class="form-group">
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" placeholder="Student ID" required>
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="confirmPassword">Confirm Password</label>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+          </div>
+          <button type="submit" class="btn-primary">Register</button>
+        </form>
+        <p class="auth-link">Already have an account? <a onclick="showPage('loginView')">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Shell -->
+  <div id="app-shell">
+    <header class="navbar">
+      <div class="nav-brand">RST Library</div>
+      <nav class="nav-links">
+        <a onclick="showPage('homePage')" id="nav-home">Home</a>
+        <a onclick="showPage('booksPage')" id="nav-books">Books</a>
+        <a onclick="showPage('eventsPage')" id="nav-events">Events</a>
+        <a onclick="showPage('favoritesPage')" id="nav-favorites">Favorites</a>
+        <a onclick="showPage('complaintsPage')" id="nav-complaints">Complaints</a>
+      </nav>
+      <div class="nav-right">
+        <span id="usernameDisplay">User</span>
+        <button id="logoutBtn" class="btn-logout">Logout</button>
+      </div>
+    </header>
+
+    <div class="search-bar-container">
+      <input type="text" id="globalSearch" placeholder="Search books by title or author..." class="search-input">
+      <button id="searchBtn" class="btn-search">Search</button>
+    </div>
+
+    <!-- Home Page -->
+    <main id="homePage" class="container page-view">
+      <h2 id="welcomeMessage">Welcome, User!</h2>
+      <section class="section">
+        <h3>Recently Added Books</h3>
+        <div id="recentBooks" class="book-grid"></div>
+      </section>
+      <section class="section">
+        <h3>Upcoming Events</h3>
+        <div id="upcomingEvents" class="event-grid"></div>
+      </section>
+    </main>
+
+    <!-- Books Page -->
+    <main id="booksPage" class="container page-view">
+      <h2>Library Books</h2>
+      <div class="filter-container">
+        <label for="categoryFilter">Category:</label>
+        <select id="categoryFilter" class="form-select">
+          <option value="All">All Categories</option>
+          <option value="Computer Science">Computer Science</option>
+          <option value="AI & ML">AI & ML</option>
+          <option value="Physics">Physics</option>
+          <option value="Web Development">Web Development</option>
+        </select>
+      </div>
+      <div id="booksGrid" class="book-grid"></div>
+    </main>
+
+    <!-- Events Page -->
+    <main id="eventsPage" class="container page-view">
+      <h2>Upcoming Events</h2>
+      <div id="eventsList" class="event-grid"></div>
+    </main>
+
+    <!-- Favorites Page -->
+    <main id="favoritesPage" class="container page-view">
+      <h2>My Favorite Books</h2>
+      <div id="favoritesGrid" class="book-grid"></div>
+    </main>
+
+    <!-- Complaints Page -->
+    <main id="complaintsPage" class="container page-view complaint-page">
+      <h2>Submit Feedback / Complaint</h2>
+      <form id="complaintForm">
+        <div class="form-group">
+          <label for="issueType">Issue Type</label>
+          <select id="issueType" class="form-select" required>
+            <option value="">Select type</option>
+            <option value="Technical Issue">Technical Issue</option>
+            <option value="Another issue type">Another issue type</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="complaintMessage">Message</label>
+          <textarea id="complaintMessage" rows="5" placeholder="Describe your issue..." required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit Feedback</button>
+      </form>
+      <div class="contact-info">
+        <h3>Contact Us</h3>
+        <p>Email: library@rst.edu</p>
+        <p>Phone: (555) 123-4567</p>
+        <p>Working hours: Mon–Fri 8am – 8pm, Sat 10am – 4pm</p>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ==================== Mock Data & Storage ====================
+    const MOCK_BOOKS = [
+        {id: 1, title: "The Great Gatsby", author: "F. Scott Fitzgerald", category: "Fiction", coverImage: "https://via.placeholder.com/150x200?text=Gatsby"},
+        {id: 2, title: "1984", author: "George Orwell", category: "Dystopian", coverImage: "https://via.placeholder.com/150x200?text=1984"},
+        {id: 3, title: "To Kill a Mockingbird", author: "Harper Lee", category: "Fiction", coverImage: "https://via.placeholder.com/150x200?text=Mockingbird"},
+        {id: 4, title: "The Catcher in the Rye", author: "J.D. Salinger", category: "Fiction", coverImage: "https://via.placeholder.com/150x200?text=Catcher"},
+        {id: 5, title: "A Brief History of Time", author: "Stephen Hawking", category: "Science", coverImage: "https://via.placeholder.com/150x200?text=Science"},
+    ];
+
+    const MOCK_EVENTS = [
+        {id: 1, title: "Book Club Meeting", description: "Discussing The Great Gatsby", date: "2026-06-01", time: "18:00", location: "Library Hall"},
+        {id: 2, title: "Author Talk", description: "A talk by a local author", date: "2026-06-15", time: "19:00", location: "Online"},
+    ];
+
+    // Initialize storage if empty
+    if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
+    if (!localStorage.getItem('favorites')) localStorage.setItem('favorites', JSON.stringify({}));
+
+    // ==================== SPA Navigation ====================
+    function showPage(pageId) {
+        // Hide all views
+        document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
+        
+        // Handle shell visibility
+        const appShell = document.getElementById('app-shell');
+        const isAuthPage = pageId === 'loginView' || pageId === 'registerView';
+        
+        if (isAuthPage) {
+            appShell.style.display = 'none';
+            document.body.classList.add('auth-page');
+            document.getElementById(pageId).classList.add('active');
+        } else {
+            appShell.style.display = 'block';
+            document.body.classList.remove('auth-page');
+            document.getElementById(pageId).classList.add('active');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
+            const navId = 'nav-' + pageId.replace('Page', '').toLowerCase();
+            const navLink = document.getElementById(navId);
+            if (navLink) navLink.classList.add('active');
+            
+            // Re-initialize page content
+            initPageContent(pageId);
+        }
+    }
+
+    function initPageContent(pageId) {
+        if (pageId === 'homePage') {
+            renderBookGrid(MOCK_BOOKS.slice(0, 4), document.getElementById('recentBooks'), true);
+            loadUpcomingEvents();
+        } else if (pageId === 'booksPage') {
+            filterBooks();
+        } else if (pageId === 'favoritesPage') {
+            loadFavoritesPage();
+        } else if (pageId === 'eventsPage') {
+            loadEvents();
+        }
+    }
+
+    // ==================== Helper Functions ====================
+    function getToken() { return localStorage.getItem('token'); }
+    function requireAuth() { 
+        if (!getToken()) {
+            showPage('loginView');
+            return false;
+        }
+        return true;
+    }
+    function logout() { 
+        localStorage.removeItem('token'); 
+        showPage('loginView');
+    }
+
+    function getCurrentUser() {
+        const email = localStorage.getItem('token');
+        const users = JSON.parse(localStorage.getItem('users'));
+        return users.find(u => u.email === email);
+    }
+
+    // ==================== UI Logic ====================
+    async function loadUserProfile() {
+        const user = getCurrentUser();
+        if (!user) { logout(); return; }
+        
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        if (usernameDisplay) usernameDisplay.textContent = user.fullName;
+
+        const welcomeMsg = document.getElementById('welcomeMessage');
+        if (welcomeMsg) welcomeMsg.textContent = `Welcome, ${user.fullName}!`;
+        return user;
+    }
+
+    function filterBooks() {
+        const searchQuery = document.getElementById('globalSearch').value.toLowerCase();
+        const category = document.getElementById('categoryFilter').value;
+        
+        const filtered = MOCK_BOOKS.filter(b => 
+            (category === 'All' || b.category === category) &&
+            (b.title.toLowerCase().includes(searchQuery) || b.author.toLowerCase().includes(searchQuery))
+        );
+        renderBookGrid(filtered, document.getElementById('booksGrid'), true);
+    }
+
+    // ===================== Auth Forms =====================
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const users = JSON.parse(localStorage.getItem('users'));
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            localStorage.setItem('token', email);
+            loadUserProfile();
+            showPage('homePage');
+        } else {
+            alert('Invalid credentials. Try registering first.');
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const fullName = document.getElementById('fullName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (password !== confirmPassword) { alert('Passwords do not match'); return; }
+        
+        const users = JSON.parse(localStorage.getItem('users'));
+        if (users.find(u => u.email === email)) { alert('User already exists'); return; }
+        
+        users.push({ fullName, email, password });
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Registration successful! Please login.');
+        showPage('loginView');
+    });
+
+    // ==================== UI Rendering ====================
+    function renderBookGrid(books, container, showFavButton = true) {
+        if (!container) return;
+        if (books.length === 0) {
+            container.innerHTML = '<p>No books found.</p>';
+            return;
+        }
+        container.innerHTML = books.map(book => `
+            <div class="book-card">
+                <img src="${book.coverImage}" alt="${book.title}">
+                <h4>${book.title}</h4>
+                <p>${book.author}</p>
+                ${showFavButton 
+                    ? `<button class="btn-fav" onclick="addToFavorites(${book.id})">♥ Add to Favorites</button>`
+                    : `<button class="btn-remove-fav" onclick="removeFromFavorites(${book.id})">Remove</button>`
+                }
+            </div>
+        `).join('');
+    }
+
+    window.addToFavorites = function(bookId) {
+        const email = localStorage.getItem('token');
+        const favs = JSON.parse(localStorage.getItem('favorites'));
+        if (!favs[email]) favs[email] = [];
+        if (!favs[email].includes(bookId)) {
+            favs[email].push(bookId);
+            localStorage.setItem('favorites', JSON.stringify(favs));
+            alert('Added to favorites!');
+        } else {
+            alert('Already in favorites');
+        }
+    };
+
+    window.removeFromFavorites = function(bookId) {
+        const email = localStorage.getItem('token');
+        const favs = JSON.parse(localStorage.getItem('favorites'));
+        favs[email] = favs[email].filter(id => id !== bookId);
+        localStorage.setItem('favorites', JSON.stringify(favs));
+        loadFavoritesPage();
+    };
+
+    function loadFavoritesPage() {
+        const grid = document.getElementById('favoritesGrid');
+        const email = localStorage.getItem('token');
+        const favIds = (JSON.parse(localStorage.getItem('favorites')) || {})[email] || [];
+        const favBooks = MOCK_BOOKS.filter(b => favIds.includes(b.id));
+        
+        if (favBooks.length === 0) {
+            grid.innerHTML = '<p>No favorites yet.</p>';
+        } else {
+            renderBookGrid(favBooks, grid, false);
+        }
+    }
+
+    function loadUpcomingEvents() {
+        const container = document.getElementById('upcomingEvents');
+        if (!container) return;
+        container.innerHTML = MOCK_EVENTS.slice(0, 3).map(event => `
+            <div class="event-card">
+                <h4>${event.title}</h4>
+                <p>${event.description}</p>
+                <button class="btn-register" onclick="alert('Registered!')">Register</button>
+            </div>
+        `).join('');
+    }
+
+    function loadEvents() {
+        const container = document.getElementById('eventsList');
+        if (!container) return;
+        container.innerHTML = MOCK_EVENTS.map(event => `
+            <div class="event-card">
+                <h4>${event.title}</h4>
+                <p>${event.description}</p>
+                <p><strong>Date:</strong> ${event.date} | <strong>Location:</strong> ${event.location}</p>
+                <button class="btn-register" onclick="alert('Registered!')">Register</button>
+            </div>
+        `).join('');
+    }
+
+    // ==================== Initialization ====================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Logout button
+        document.getElementById('logoutBtn').addEventListener('click', logout);
+
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            showPage('booksPage');
+        });
+        document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') showPage('booksPage');
+        });
+
+        // Category filter
+        document.getElementById('categoryFilter').addEventListener('change', filterBooks);
+
+        // Complaint form
+        document.getElementById('complaintForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Feedback submitted successfully!');
+            e.target.reset();
+        });
+
+        // Initial Page Load
+        if (requireAuth()) {
+            loadUserProfile();
+            showPage('homePage');
+        }
+    });
+  </script>
+</body>
+</html>
