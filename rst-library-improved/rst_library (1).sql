@@ -62,7 +62,7 @@ INSERT INTO books (title, author, category, coverImage) VALUES
 ('Clean Code','Robert C. Martin','Computer Science', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/dsotFHpbWmlVqoqE.jpg'),
 ('Deep Learning Illustrated','Jon Krohn','AI & ML', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/gDhfxfjkfhEAEtxi.jpg'),
 ('Astrophysics for People in a Hurry','Neil deGrasse Tyson','Physics', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/mmvxMboUMISXuGjJ.jpg'),
-('Eloquent JavaScript','Marijn Haverbeke','Web Development', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WiMnFrSmEskQSHZG.jpg'),
+('Eloquent JS','Marijn Haverbeke','Web Development', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WiMnFrSmEskQSHZG.jpg'),
 ('Computer Networking: A Top-Down Approach','James Kurose','Computer Science', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/CssZayVhRZoBJwDx.jpg'),
 ('Pattern Recognition and Machine Learning','Christopher Bishop','AI & ML', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/kMvUeLTCYVkQolhH.jpg'),
 ('The Feynman Lectures on Physics','Richard Feynman','Physics', 'https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/TyhOYhQTgOKqnLge.jpg'),
