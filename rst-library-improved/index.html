@@ -5,946 +5,178 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RST Library</title>
   <style>
-    /* ========= إعدادات عامة ========= */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f5f5f5;
-      color: #333;
-      padding-top: 70px;
-    }
-
-    body.auth-page {
-      padding-top: 0;
-    }
-
-    /* ========= شريط التنقل الثابت ========= */
-    .navbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background-color: #1a237e;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px 30px;
-      z-index: 1000;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-
-    .nav-brand {
-      font-size: 1.5em;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 25px;
-    }
-
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-      cursor: pointer;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active {
-      color: #ffd54f;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-
-    #usernameDisplay {
-      font-weight: 600;
-    }
-
-    .btn-logout {
-      background-color: #e53935;
-      color: white;
-      border: none;
-      padding: 8px 15px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .btn-logout:hover {
-      background-color: #c62828;
-    }
-
-    /* ========= شريط البحث العام ========= */
-    .search-bar-container {
-      width: 90%;
-      max-width: 600px;
-      margin: 20px auto;
-      display: flex;
-      gap: 10px;
-    }
-
-    .search-input {
-      flex: 1;
-      padding: 10px 15px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
-      font-size: 16px;
-    }
-
-    .btn-search {
-      padding: 10px 20px;
-      background-color: #1a237e;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .btn-search:hover {
-      background-color: #283593;
-    }
-
-    /* ========= الحاوية الرئيسية ========= */
-    .container {
-      width: 90%;
-      max-width: 1200px;
-      margin: 20px auto;
-      background: white;
-      padding: 25px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
-    }
-
-    h2, h3 {
-      color: #1a237e;
-      margin-bottom: 15px;
-    }
-
-    .section {
-      margin-bottom: 30px;
-    }
-
-    /* ========= شبكة الكتب ========= */
-    .book-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .book-card {
-      background-color: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-      text-align: center;
-      padding: 15px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      cursor: pointer;
-    }
-
-    .book-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .book-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-bottom: 10px;
-      background-color: #e0e0e0;
-    }
-
-    .book-card h4 {
-      font-size: 16px;
-      margin-bottom: 5px;
-      color: #1a237e;
-    }
-
-    .book-card p {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .btn-fav, .btn-remove-fav {
-      padding: 8px 12px;
-      background-color: #1a237e;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      margin-top: auto;
-      transition: background 0.2s;
-    }
-
-    .btn-fav:hover {
-      background-color: #283593;
-    }
-
-    .btn-remove-fav {
-      background-color: #e53935;
-    }
-
-    .btn-remove-fav:hover {
-      background-color: #c62828;
-    }
-
-    /* ========= صفحة تفاصيل الكتاب ========= */
-    .book-detail-container {
-      display: flex;
-      gap: 40px;
-      margin-top: 30px;
-    }
-
-    .book-detail-image {
-      flex: 0 0 300px;
-    }
-
-    .book-detail-image img {
-      width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .book-detail-info {
-      flex: 1;
-    }
-
-    .book-detail-info h1 {
-      color: #1a237e;
-      margin-bottom: 10px;
-      font-size: 2em;
-    }
-
-    .book-detail-info .author {
-      font-size: 1.2em;
-      color: #666;
-      margin-bottom: 5px;
-    }
-
-    .book-detail-info .category {
-      display: inline-block;
-      background-color: #1a237e;
-      color: white;
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 0.9em;
-      margin-bottom: 20px;
-    }
-
-    .book-detail-info .description {
-      font-size: 1.05em;
-      line-height: 1.8;
-      color: #555;
-      margin-bottom: 30px;
-    }
-
-    .book-detail-actions {
-      display: flex;
-      gap: 15px;
-    }
-
-    .btn-back {
-      background-color: #666;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .btn-back:hover {
-      background-color: #555;
-    }
-
-    .btn-add-fav-detail {
-      background-color: #1a237e;
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .btn-add-fav-detail:hover {
-      background-color: #283593;
-    }
-
-    /* ========= شبكة الأحداث ========= */
-    .event-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .event-card {
-      background: #f9f9f9;
-      border-left: 5px solid #1a237e;
-      padding: 20px;
-      border-radius: 6px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    .event-card h4 {
-      margin-bottom: 8px;
-      color: #1a237e;
-    }
-
-    .event-card p {
-      font-size: 14px;
-      margin-bottom: 10px;
-      color: #555;
-    }
-
-    .btn-register {
-      background-color: #1a237e;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-
-    .btn-register:hover {
-      background-color: #283593;
-    }
-
-    /* ========= فلتر الفئة ========= */
-    .filter-container {
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .filter-container label {
-      font-weight: 600;
-      color: #1a237e;
-    }
-
-    .form-select {
-      padding: 8px 12px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    /* ========= صفحات المصادقة ========= */
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #1a237e;
-    }
-
-    .auth-box {
-      background: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-      width: 100%;
-      max-width: 450px;
-      text-align: center;
-    }
-
-    .auth-box h1 {
-      color: #1a237e;
-      margin-bottom: 5px;
-    }
-
-    .auth-box h2 {
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-      text-align: left;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 600;
-      color: #333;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      font-family: inherit;
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 12px;
-      background-color: #1a237e;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn-primary:hover {
-      background-color: #283593;
-    }
-
-    .auth-link {
-      margin-top: 15px;
-      color: #555;
-    }
-
-    .auth-link a {
-      color: #1a237e;
-      text-decoration: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* ========= صفحة الشكاوى ========= */
-    .complaint-page form {
-      max-width: 600px;
-      margin-bottom: 30px;
-    }
-
-    .contact-info {
-      background: #f0f0f0;
-      padding: 20px;
-      border-radius: 8px;
-    }
-
-    .contact-info h3 {
-      margin-bottom: 10px;
-    }
-
-    /* ========= استجابة للأجهزة الصغيرة ========= */
-    @media (max-width: 768px) {
-      .navbar {
-        flex-direction: column;
-        padding: 15px;
-      }
-      .nav-links {
-        margin-top: 10px;
-        gap: 15px;
-      }
-      .search-bar-container {
-        flex-direction: column;
-      }
-      .book-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      }
-      .book-detail-container {
-        flex-direction: column;
-      }
-      .book-detail-image {
-        flex: 0 0 auto;
-      }
-    }
-
-    /* ========= SPA View Management ========= */
-    .page-view {
-      display: none;
-    }
-    .page-view.active {
-      display: block;
-    }
-    #app-shell {
-      display: none;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; color: #333; padding-top: 70px; }
+    body.auth-page { padding-top: 0; }
+    .navbar { position: fixed; top: 0; left: 0; width: 100%; background: #1a237e; color: white; display: flex; align-items: center; justify-content: space-between; padding: 15px 30px; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    .nav-brand { font-size: 1.5em; font-weight: bold; }
+    .nav-links { display: flex; gap: 25px; }
+    .nav-links a { color: white; text-decoration: none; font-weight: 500; cursor: pointer; }
+    .nav-links a:hover, .nav-links a.active { color: #ffd54f; }
+    .nav-right { display: flex; align-items: center; gap: 15px; }
+    .btn-logout { background: #e53935; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .search-bar-container { width: 90%; max-width: 600px; margin: 20px auto; display: flex; gap: 10px; }
+    .search-input { flex: 1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 20px; font-size: 16px; }
+    .btn-search { padding: 10px 20px; background: #1a237e; color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; }
+    .container { width: 90%; max-width: 1200px; margin: 20px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    h2, h3 { color: #1a237e; margin-bottom: 15px; }
+    .section { margin-bottom: 30px; }
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; margin-top: 20px; }
+    .book-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; transition: 0.2s; display: flex; flex-direction: column; height: 100%; cursor: pointer; }
+    .book-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .book-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; background: #e0e0e0; }
+    .book-card h4 { font-size: 16px; margin-bottom: 5px; color: #1a237e; }
+    .book-card p { font-size: 14px; color: #666; margin-bottom: 10px; }
+    .btn-fav, .btn-remove-fav { padding: 8px 12px; background: #1a237e; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; margin-top: auto; }
+    .btn-remove-fav { background: #e53935; }
+    .book-detail-container { display: flex; gap: 40px; margin-top: 30px; }
+    .book-detail-image { flex: 0 0 300px; }
+    .book-detail-image img { width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .book-detail-info { flex: 1; }
+    .book-detail-info h1 { color: #1a237e; font-size: 2em; }
+    .category { display: inline-block; background: #1a237e; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9em; margin: 10px 0 20px; }
+    .description { font-size: 1.05em; line-height: 1.8; color: #555; margin-bottom: 30px; }
+    .book-detail-actions { display: flex; gap: 15px; }
+    .btn-back, .btn-add-fav-detail { padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .btn-back { background: #666; color: white; }
+    .btn-add-fav-detail { background: #1a237e; color: white; }
+    .event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .event-card { background: #f9f9f9; border-left: 5px solid #1a237e; padding: 20px; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+    .btn-register { background: #1a237e; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .filter-container { margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .form-select { padding: 8px 12px; border: 1px solid #ccc; border-radius: 4px; }
+    .auth-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #1a237e; }
+    .auth-box { background: white; padding: 40px; border-radius: 8px; width: 100%; max-width: 450px; text-align: center; }
+    .form-group { margin-bottom: 20px; text-align: left; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+    .btn-primary { width: 100%; padding: 12px; background: #1a237e; color: white; border: none; border-radius: 4px; font-size: 18px; font-weight: bold; cursor: pointer; }
+    .auth-link { margin-top: 15px; color: #555; }
+    .auth-link a { color: #1a237e; font-weight: bold; cursor: pointer; }
+    .contact-info { background: #f0f0f0; padding: 20px; border-radius: 8px; }
+    @media (max-width: 768px) { .navbar { flex-direction: column; } .nav-links { margin-top: 10px; } .book-detail-container { flex-direction: column; } }
+    .page-view { display: none; }
+    .page-view.active { display: block; }
+    #app-shell { display: none; }
   </style>
 </head>
 <body>
-
-  <!-- Authentication Views -->
   <div id="loginView" class="page-view auth-page">
-    <div class="auth-container">
-      <div class="auth-box">
-        <h1>RST Library</h1>
-        <h2>Login</h2>
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email" required>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" required>
-          </div>
-          <button type="submit" class="btn-primary">Login</button>
-        </form>
-        <p class="auth-link">Don't have an account? <a onclick="showPage('registerView')">Register here</a></p>
-      </div>
-    </div>
+    <div class="auth-container"><div class="auth-box"><h1>RST Library</h1><h2>Login</h2>
+      <form id="loginForm"><div class="form-group"><label>Email</label><input type="email" id="email" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="password" required></div>
+        <button type="submit" class="btn-primary">Login</button></form>
+      <p class="auth-link">Don't have an account? <a onclick="showPage('registerView')">Register here</a></p>
+    </div></div>
   </div>
-
   <div id="registerView" class="page-view auth-page">
-    <div class="auth-container">
-      <div class="auth-box">
-        <h1>RST Library</h1>
-        <h2>Register</h2>
-        <form id="registerForm">
-          <div class="form-group">
-            <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" placeholder="Full Name" required>
-          </div>
-          <div class="form-group">
-            <label for="regEmail">Email</label>
-            <input type="email" id="regEmail" placeholder="Email" required>
-          </div>
-          <div class="form-group">
-            <label for="studentId">Student ID</label>
-            <input type="text" id="studentId" placeholder="Student ID" required>
-          </div>
-          <div class="form-group">
-            <label for="regPassword">Password</label>
-            <input type="password" id="regPassword" placeholder="Min 6 characters" required minlength="6">
-          </div>
-          <div class="form-group">
-            <label for="confirmPassword">Confirm Password</label>
-            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-          </div>
-          <button type="submit" class="btn-primary">Register</button>
-        </form>
-        <p class="auth-link">Already have an account? <a onclick="showPage('loginView')">Login</a></p>
-      </div>
-    </div>
+    <div class="auth-container"><div class="auth-box"><h1>RST Library</h1><h2>Register</h2>
+      <form id="registerForm"><div class="form-group"><label>Full Name</label><input type="text" id="fullName" required></div>
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label>Password</label><input type="password" id="regPassword" required minlength="6"></div>
+        <div class="form-group"><label>Confirm Password</label><input type="password" id="confirmPassword" required></div>
+        <button type="submit" class="btn-primary">Register</button></form>
+      <p class="auth-link">Already have an account? <a onclick="showPage('loginView')">Login</a></p>
+    </div></div>
   </div>
-
-  <!-- Main App Shell -->
   <div id="app-shell">
-    <header class="navbar">
-      <div class="nav-brand">RST Library</div>
+    <header class="navbar"><div class="nav-brand">RST Library</div>
       <nav class="nav-links">
-        <a onclick="showPage('homePage')" id="nav-home">Home</a>
-        <a onclick="showPage('booksPage')" id="nav-books">Books</a>
-        <a onclick="showPage('eventsPage')" id="nav-events">Events</a>
-        <a onclick="showPage('favoritesPage')" id="nav-favorites">Favorites</a>
+        <a onclick="showPage('homePage')" id="nav-home">Home</a><a onclick="showPage('booksPage')" id="nav-books">Books</a>
+        <a onclick="showPage('eventsPage')" id="nav-events">Events</a><a onclick="showPage('favoritesPage')" id="nav-favorites">Favorites</a>
         <a onclick="showPage('complaintsPage')" id="nav-complaints">Complaints</a>
       </nav>
-      <div class="nav-right">
-        <span id="usernameDisplay">User</span>
-        <button id="logoutBtn" class="btn-logout">Logout</button>
-      </div>
+      <div class="nav-right"><span id="usernameDisplay">User</span><button id="logoutBtn" class="btn-logout">Logout</button></div>
     </header>
-
-    <div class="search-bar-container">
-      <input type="text" id="globalSearch" placeholder="Search books by title or author..." class="search-input">
-      <button id="searchBtn" class="btn-search">Search</button>
-    </div>
-
-    <!-- Home Page -->
-    <main id="homePage" class="container page-view">
-      <h2 id="welcomeMessage">Welcome, User!</h2>
-      <section class="section">
-        <h3>Recently Added Books</h3>
-        <div id="recentBooks" class="book-grid"></div>
-      </section>
-      <section class="section">
-        <h3>Upcoming Events</h3>
-        <div id="upcomingEvents" class="event-grid"></div>
-      </section>
-    </main>
-
-    <!-- Books Page -->
-    <main id="booksPage" class="container page-view">
-      <h2>Library Books</h2>
-      <div class="filter-container">
-        <label for="categoryFilter">Category:</label>
-        <select id="categoryFilter" class="form-select">
-          <option value="All">All Categories</option>
-          <option value="Computer Science">Computer Science</option>
-          <option value="AI & ML">AI & ML</option>
-          <option value="Physics">Physics</option>
-          <option value="Web Development">Web Development</option>
-        </select>
-      </div>
-      <div id="booksGrid" class="book-grid"></div>
-    </main>
-
-    <!-- Book Detail Page -->
-    <main id="bookDetailPage" class="container page-view">
-      <div id="bookDetailContent"></div>
-    </main>
-
-    <!-- Events Page -->
-    <main id="eventsPage" class="container page-view">
-      <h2>Upcoming Events</h2>
-      <div id="eventsList" class="event-grid"></div>
-    </main>
-
-    <!-- Favorites Page -->
-    <main id="favoritesPage" class="container page-view">
-      <h2>My Favorite Books</h2>
-      <div id="favoritesGrid" class="book-grid"></div>
-    </main>
-
-    <!-- Complaints Page -->
-    <main id="complaintsPage" class="container page-view complaint-page">
-      <h2>Submit Feedback / Complaint</h2>
-      <form id="complaintForm">
-        <div class="form-group">
-          <label for="issueType">Issue Type</label>
-          <select id="issueType" class="form-select" required>
-            <option value="">Select type</option>
-            <option value="Technical Issue">Technical Issue</option>
-            <option value="Another issue type">Another issue type</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="complaintMessage">Message</label>
-          <textarea id="complaintMessage" rows="5" placeholder="Describe your issue..." required></textarea>
-        </div>
-        <button type="submit" class="btn-primary">Submit Feedback</button>
-      </form>
-      <div class="contact-info">
-        <h3>Contact Us</h3>
-        <p>Email: library@rst.edu</p>
-        <p>Phone: (555) 123-4567</p>
-        <p>Working hours: Mon–Fri 8am – 8pm, Sat 10am – 4pm</p>
-      </div>
-    </main>
+    <div class="search-bar-container"><input type="text" id="globalSearch" placeholder="Search books..." class="search-input"><button id="searchBtn" class="btn-search">Search</button></div>
+    <main id="homePage" class="container page-view"><h2 id="welcomeMessage">Welcome!</h2><section class="section"><h3>Recently Added</h3><div id="recentBooks" class="book-grid"></div></section><section class="section"><h3>Upcoming Events</h3><div id="upcomingEvents" class="event-grid"></div></section></main>
+    <main id="booksPage" class="container page-view"><h2>Library Books</h2><div class="filter-container"><label>Category:</label><select id="categoryFilter" class="form-select"><option value="All">All</option><option value="Computer Science">CS</option><option value="AI & ML">AI</option><option value="Physics">Physics</option><option value="Web Development">Web</option></select></div><div id="booksGrid" class="book-grid"></div></main>
+    <main id="bookDetailPage" class="container page-view"><div id="bookDetailContent"></div></main>
+    <main id="eventsPage" class="container page-view"><h2>Events</h2><div id="eventsList" class="event-grid"></div></main>
+    <main id="favoritesPage" class="container page-view"><h2>Favorites</h2><div id="favoritesGrid" class="book-grid"></div></main>
+    <main id="complaintsPage" class="container page-view"><h2>Feedback</h2><form id="complaintForm"><div class="form-group"><label>Type</label><select id="issueType" class="form-select" required><option value="Technical">Technical</option><option value="Other">Other</option></select></div><div class="form-group"><label>Message</label><textarea id="complaintMessage" rows="3" required></textarea></div><button type="submit" class="btn-primary">Submit</button></form></main>
   </div>
-
   <script>
-    // ==================== Real Data from SQL ====================
-    const MOCK_BOOKS = [
-        {id: 1, title: "Data Structures and Algorithms", author: "Robert Lafore", category: "Computer Science", description: "A comprehensive guide to understanding and implementing data structures and algorithms. This book covers fundamental concepts and practical applications.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/PqffhqUNgjHejxnz.jpg"},
-        {id: 2, title: "Introduction to Machine Learning", author: "Ethem Alpaydin", category: "AI & ML", description: "Learn the fundamentals of machine learning with practical examples and clear explanations. Perfect for beginners and intermediate learners.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/eoLEdRasCbfdJKLl.jpg"},
-        {id: 3, title: "Quantum Physics for Beginners", author: "Michael Brooks", category: "Physics", description: "An accessible introduction to quantum mechanics and its mind-bending implications. Explore the quantum world with clarity and wonder.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/iOMBavLDamQHnvjI.jpg"},
-        {id: 4, title: "Modern Web Development", author: "Kyle Simpson", category: "Web Development", description: "Master the latest techniques and best practices in web development. From frontend to backend, this book covers everything you need.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/CvQeUEWrzpsByPtb.jpg"},
-        {id: 5, title: "Clean Code", author: "Robert C. Martin", category: "Computer Science", description: "Learn how to write code that is readable, maintainable, and elegant. Essential reading for every software developer.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/dsotFHpbWmlVqoqE.jpg"},
-        {id: 6, title: "Deep Learning Illustrated", author: "Jon Krohn", category: "AI & ML", description: "Understand deep learning through intuitive explanations and beautiful illustrations. A visual guide to neural networks.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/gDhfxfjkfhEAEtxi.jpg"},
-        {id: 7, title: "Astrophysics for People in a Hurry", author: "Neil deGrasse Tyson", category: "Physics", description: "A quick tour of the universe by one of the world's leading astrophysicists. Fascinating insights into the cosmos.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/mmvxMboUMISXuGjJ.jpg"},
-        {id: 8, title: "Eloquent JS", author: "Marijn Haverbeke", category: "Web Development", description: "A comprehensive guide to JS programming. From basics to advanced concepts, master the language of the web.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WiMnFrSmEskQSHZG.jpg"},
-        {id: 9, title: "Computer Networking: A Top-Down Approach", author: "James Kurose", category: "Computer Science", description: "Understand how the internet works from the application layer down. A modern approach to networking.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/CssZayVhRZoBJwDx.jpg"},
-        {id: 10, title: "Pattern Recognition and Machine Learning", author: "Christopher Bishop", category: "AI & ML", description: "A comprehensive introduction to pattern recognition and machine learning. Covers theory and practical applications.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/kMvUeLTCYVkQolhH.jpg"},
-        {id: 11, title: "The Feynman Lectures on Physics", author: "Richard Feynman", category: "Physics", description: "Legendary physics lectures by one of the greatest physicists. Insightful, engaging, and transformative.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/TyhOYhQTgOKqnLge.jpg"},
-        {id: 12, title: "HTML and CSS: Design and Build Websites", author: "Jon Duckett", category: "Web Development", description: "Learn to design and build beautiful websites with HTML and CSS. Perfect for beginners with clear examples.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/XKdjouKymFusvTtC.jpg"},
-        {id: 13, title: "Operating System Concepts", author: "Abraham Silberschatz", category: "Computer Science", description: "A deep dive into operating system design and implementation. Essential for computer science students.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WBMlpqOYTIMSuBIf.jpg"},
-        {id: 14, title: "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow", author: "Aurélien Géron", category: "AI & ML", description: "Practical machine learning with popular Python libraries. Build real-world ML systems.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/jQTiaSmkjyzajFZA.jpg"},
-        {id: 15, title: "Seven Brief Lessons on Physics", author: "Carlo Rovelli", category: "Physics", description: "A poetic and profound exploration of modern physics. Short, elegant, and deeply insightful.", coverImage: "https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WLxnLQEvRgjrquYy.jpg"}
+    const B = [
+      {id:1,t:"Data Structures",a:"Robert Lafore",c:"Computer Science",d:"Guide to DSA.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/PqffhqUNgjHejxnz.jpg"},
+      {id:2,t:"Machine Learning",a:"Ethem Alpaydin",c:"AI & ML",d:"ML fundamentals.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/eoLEdRasCbfdJKLl.jpg"},
+      {id:3,t:"Quantum Physics",a:"Michael Brooks",c:"Physics",d:"Intro to Quantum.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/iOMBavLDamQHnvjI.jpg"},
+      {id:4,t:"Modern Web Dev",a:"Kyle Simpson",c:"Web Development",d:"Web best practices.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/CvQeUEWrzpsByPtb.jpg"},
+      {id:5,t:"Clean Code",a:"Robert C. Martin",c:"Computer Science",d:"Readable code.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/dsotFHpbWmlVqoqE.jpg"},
+      {id:6,t:"Deep Learning",a:"Jon Krohn",c:"AI & ML",d:"Visual guide to NN.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/gDhfxfjkfhEAEtxi.jpg"},
+      {id:7,t:"Astrophysics",a:"Neil Tyson",c:"Physics",d:"Quick tour of universe.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/mmvxMboUMISXuGjJ.jpg"},
+      {id:8,t:"Eloquent JS",a:"Marijn Haverbeke",c:"Web Development",d:"JS guide.",i:"https://files.manuscdn.com/user_upload_by_module/session_file/310419663028403965/WiMnFrSmEskQSHZG.jpg"}
     ];
-
-    const MOCK_EVENTS = [
-        {id: 1, title: "Research Paper Writing Workshop", description: "Learn effective strategies for writing academic research papers.", date: "2026-04-15", time: "14:00 - 16:00", location: "Main Library, Room B12"},
-        {id: 2, title: "Digital Resources Orientation", description: "Tour of our digital databases, e-books, and research tools.", date: "2026-04-20", time: "10:00 - 11:30", location: "Library Computer Lab"},
-        {id: 3, title: "Book Club: Classic Literature", description: "Monthly discussion on selected classic novels. All are welcome!", date: "2026-05-01", time: "16:00 - 17:30", location: "Library Reading Room"},
-        {id: 4, title: "Citation Management Tools", description: "Workshop on Zotero, Mendeley, and other reference managers.", date: "2026-05-10", time: "13:00 - 14:30", location: "Online (Zoom)"},
-        {id: 5, title: "Poetry Reading Night", description: "Open mic night for poetry lovers. Share your work or listen!", date: "2026-04-25", time: "18:00 - 20:00", location: "Library Auditorium"},
-        {id: 6, title: "Library Tour for New Students", description: "Guided tour of the library facilities and services.", date: "2026-04-10", time: "11:00 - 12:00", location: "Library Main Entrance"}
+    const E = [
+      {id:1,t:"Writing Workshop",d:"Academic writing.",da:"2026-04-15",l:"Room B12"},
+      {id:2,t:"Digital Orientation",d:"Library tools.",da:"2026-04-20",l:"Computer Lab"}
     ];
-
-    // Initialize storage if empty
-    if (!localStorage.getItem('users')) localStorage.setItem('users', JSON.stringify([]));
-    if (!localStorage.getItem('favorites')) localStorage.setItem('favorites', JSON.stringify({}));
-
-    // ==================== SPA Navigation ====================
-    function showPage(pageId) {
-        // Hide all views
-        document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
-        
-        // Handle shell visibility
-        const appShell = document.getElementById('app-shell');
-        const isAuthPage = pageId === 'loginView' || pageId === 'registerView';
-        
-        if (isAuthPage) {
-            appShell.style.display = 'none';
-            document.body.classList.add('auth-page');
-            document.getElementById(pageId).classList.add('active');
-        } else {
-            appShell.style.display = 'block';
-            document.body.classList.remove('auth-page');
-            document.getElementById(pageId).classList.add('active');
-            
-            // Update active nav link
-            document.querySelectorAll('.nav-links a').forEach(link => link.classList.remove('active'));
-            
-            if (pageId !== 'bookDetailPage') {
-                const navId = 'nav-' + pageId.replace('Page', '').toLowerCase();
-                const navLink = document.getElementById(navId);
-                if (navLink) navLink.classList.add('active');
-            }
-            
-            // Re-initialize page content
-            initPageContent(pageId);
-        }
-    }
-
-    function initPageContent(pageId) {
-        if (pageId === 'homePage') {
-            renderBookGrid(MOCK_BOOKS.slice(0, 4), document.getElementById('recentBooks'), true);
-            loadUpcomingEvents();
-        } else if (pageId === 'booksPage') {
-            filterBooks();
-        } else if (pageId === 'favoritesPage') {
-            loadFavoritesPage();
-        } else if (pageId === 'eventsPage') {
-            loadEvents();
-        }
-    }
-
-    // ==================== Helper Functions ====================
-    function getToken() { return localStorage.getItem('token'); }
-    function requireAuth() { 
-        if (!getToken()) {
-            showPage('loginView');
-            return false;
-        }
-        return true;
-    }
-    function logout() { 
-        localStorage.removeItem('token'); 
-        showPage('loginView');
-    }
-
-    function getCurrentUser() {
-        const email = localStorage.getItem('token');
-        const users = JSON.parse(localStorage.getItem('users'));
-        return users.find(u => u.email === email);
-    }
-
-    // ==================== UI Logic ====================
-    async function loadUserProfile() {
-        const user = getCurrentUser();
-        if (!user) { logout(); return; }
-        
-        const usernameDisplay = document.getElementById('usernameDisplay');
-        if (usernameDisplay) usernameDisplay.textContent = user.fullName;
-
-        const welcomeMsg = document.getElementById('welcomeMessage');
-        if (welcomeMsg) welcomeMsg.textContent = `Welcome, ${user.fullName}!`;
-        return user;
-    }
-
-    function filterBooks() {
-        const searchQuery = document.getElementById('globalSearch').value.toLowerCase();
-        const category = document.getElementById('categoryFilter').value;
-        
-        const filtered = MOCK_BOOKS.filter(b => 
-            (category === 'All' || b.category === category) &&
-            (b.title.toLowerCase().includes(searchQuery) || b.author.toLowerCase().includes(searchQuery))
-        );
-        renderBookGrid(filtered, document.getElementById('booksGrid'), true);
-    }
-
-    // ===================== Auth Forms =====================
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const users = JSON.parse(localStorage.getItem('users'));
-        const user = users.find(u => u.email === email && u.password === password);
-        
-        if (user) {
-            localStorage.setItem('token', email);
-            loadUserProfile();
-            showPage('homePage');
-        } else {
-            alert('Invalid credentials. Try registering first.');
-        }
-    });
-
-    document.getElementById('registerForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fullName = document.getElementById('fullName').value;
-        const email = document.getElementById('regEmail').value;
-        const password = document.getElementById('regPassword').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-
-        if (password !== confirmPassword) { alert('Passwords do not match'); return; }
-        
-        const users = JSON.parse(localStorage.getItem('users'));
-        if (users.find(u => u.email === email)) { alert('User already exists'); return; }
-        
-        users.push({ fullName, email, password });
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Registration successful! Please login.');
-        showPage('loginView');
-    });
-
-    // ==================== UI Rendering ====================
-    function renderBookGrid(books, container, showFavButton = true) {
-        if (!container) return;
-        if (books.length === 0) {
-            container.innerHTML = '<p>No books found.</p>';
-            return;
-        }
-        container.innerHTML = books.map(book => `
-            <div class="book-card" onclick="showBookDetail(${book.id})">
-                <img src="${book.coverImage}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x200?text=${encodeURIComponent(book.title.substring(0, 15))}'" style="background-color: #e0e0e0;">
-                <h4>${book.title}</h4>
-                <p>${book.author}</p>
-                ${showFavButton 
-                    ? `<button class="btn-fav" onclick="event.stopPropagation(); addToFavorites(${book.id})">♥ Add to Favorites</button>`
-                    : `<button class="btn-remove-fav" onclick="event.stopPropagation(); removeFromFavorites(${book.id})">Remove</button>`
-                }
-            </div>
-        `).join('');
-    }
-
-    // ==================== Book Detail Page ====================
-    window.showBookDetail = function(bookId) {
-        const book = MOCK_BOOKS.find(b => b.id === bookId);
-        if (!book) return;
-        
-        const container = document.getElementById('bookDetailContent');
-        const email = localStorage.getItem('token');
-        const favIds = (JSON.parse(localStorage.getItem('favorites')) || {})[email] || [];
-        const isFavorite = favIds.includes(book.id);
-        
-        container.innerHTML = `
-            <button class="btn-back" onclick="showPage('booksPage')">← Back to Books</button>
-            <div class="book-detail-container">
-                <div class="book-detail-image">
-                    <img src="${book.coverImage}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/150x200?text=${encodeURIComponent(book.title.substring(0, 15))}'">
-                </div>
-                <div class="book-detail-info">
-                    <h1>${book.title}</h1>
-                    <div class="author">by ${book.author}</div>
-                    <div class="category">${book.category}</div>
-                    <div class="description">${book.description}</div>
-                    <div class="book-detail-actions">
-                        <button class="btn-back" onclick="showPage('booksPage')">Back to Books</button>
-                        ${isFavorite 
-                            ? `<button class="btn-remove-fav" onclick="removeFromFavorites(${book.id}); showPage('booksPage')">Remove from Favorites</button>`
-                            : `<button class="btn-add-fav-detail" onclick="addToFavorites(${book.id}); alert('Added to favorites!')">♥ Add to Favorites</button>`
-                        }
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        showPage('bookDetailPage');
+    const get = k => JSON.parse(localStorage.getItem(k) || (k==='users'?'[]':'{}'));
+    const set = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+    const showPage = p => {
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      const isAuth = p.includes('View');
+      document.getElementById('app-shell').style.display = isAuth ? 'none' : 'block';
+      document.body.classList.toggle('auth-page', isAuth);
+      document.getElementById(p).classList.add('active');
+      if(!isAuth) initPage(p);
     };
-
-    window.addToFavorites = function(bookId) {
-        const email = localStorage.getItem('token');
-        const favs = JSON.parse(localStorage.getItem('favorites'));
-        if (!favs[email]) favs[email] = [];
-        if (!favs[email].includes(bookId)) {
-            favs[email].push(bookId);
-            localStorage.setItem('favorites', JSON.stringify(favs));
-        }
+    const initPage = p => {
+      if(p==='homePage') { render(B.slice(0,4), 'recentBooks'); renderE(E.slice(0,2), 'upcomingEvents'); }
+      else if(p==='booksPage') filter();
+      else if(p==='favoritesPage') renderFavs();
+      else if(p==='eventsPage') renderE(E, 'eventsList');
     };
-
-    window.removeFromFavorites = function(bookId) {
-        const email = localStorage.getItem('token');
-        const favs = JSON.parse(localStorage.getItem('favorites'));
-        if (favs[email]) {
-            favs[email] = favs[email].filter(id => id !== bookId);
-            localStorage.setItem('favorites', JSON.stringify(favs));
-        }
-        loadFavoritesPage();
+    const render = (books, id, isFav=true) => {
+      const c = document.getElementById(id);
+      c.innerHTML = books.map(b => `<div class="book-card" onclick="showDetail(${b.id})">
+        <img src="${b.i}" onerror="this.src='https://via.placeholder.com/150x200?text=Book'">
+        <h4>${b.t}</h4><p>${b.a}</p>
+        <button class="${isFav?'btn-fav':'btn-remove-fav'}" onclick="event.stopPropagation(); ${isFav?'addFav':'remFav'}(${b.id})">${isFav?'♥ Add':'Remove'}</button>
+      </div>`).join('');
     };
-
-    function loadFavoritesPage() {
-        const grid = document.getElementById('favoritesGrid');
-        const email = localStorage.getItem('token');
-        const favIds = (JSON.parse(localStorage.getItem('favorites')) || {})[email] || [];
-        const favBooks = MOCK_BOOKS.filter(b => favIds.includes(b.id));
-        
-        if (favBooks.length === 0) {
-            grid.innerHTML = '<p>No favorites yet.</p>';
-        } else {
-            renderBookGrid(favBooks, grid, false);
-        }
-    }
-
-    function loadUpcomingEvents() {
-        const container = document.getElementById('upcomingEvents');
-        if (!container) return;
-        container.innerHTML = MOCK_EVENTS.slice(0, 3).map(event => `
-            <div class="event-card">
-                <h4>${event.title}</h4>
-                <p>${event.description}</p>
-                <button class="btn-register" onclick="alert('Registered!')">Register</button>
-            </div>
-        `).join('');
-    }
-
-    function loadEvents() {
-        const container = document.getElementById('eventsList');
-        if (!container) return;
-        container.innerHTML = MOCK_EVENTS.map(event => `
-            <div class="event-card">
-                <h4>${event.title}</h4>
-                <p>${event.description}</p>
-                <p><strong>Date:</strong> ${event.date} | <strong>Location:</strong> ${event.location}</p>
-                <button class="btn-register" onclick="alert('Registered!')">Register</button>
-            </div>
-        `).join('');
-    }
-
-    // ==================== Initialization ====================
-    document.addEventListener('DOMContentLoaded', () => {
-        // Logout button
-        document.getElementById('logoutBtn').addEventListener('click', logout);
-
-        // Search functionality
-        document.getElementById('searchBtn').addEventListener('click', () => {
-            showPage('booksPage');
-        });
-        document.getElementById('globalSearch').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') showPage('booksPage');
-        });
-
-        // Category filter
-        document.getElementById('categoryFilter').addEventListener('change', filterBooks);
-
-        // Complaint form
-        document.getElementById('complaintForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            alert('Feedback submitted successfully!');
-            e.target.reset();
-        });
-
-        // Initial Page Load
-        if (requireAuth()) {
-            loadUserProfile();
-            showPage('homePage');
-        }
-    });
+    const renderE = (evs, id) => {
+      document.getElementById(id).innerHTML = evs.map(e => `<div class="event-card"><h4>${e.t}</h4><p>${e.d}</p><button class="btn-register" onclick="alert('Registered!')">Register</button></div>`).join('');
+    };
+    const showDetail = id => {
+      const b = B.find(x => x.id === id);
+      document.getElementById('bookDetailContent').innerHTML = `<button class="btn-back" onclick="showPage('booksPage')">← Back</button>
+        <div class="book-detail-container"><div class="book-detail-image"><img src="${b.i}"></div>
+        <div class="book-detail-info"><h1>${b.t}</h1><div class="category">${b.c}</div><p class="description">${b.d}</p>
+        <button class="btn-add-fav-detail" onclick="addFav(${b.id})">♥ Add to Favorites</button></div></div>`;
+      showPage('bookDetailPage');
+    };
+    const addFav = id => {
+      const u = localStorage.getItem('token'), f = get('favorites');
+      if(!f[u]) f[u] = []; if(!f[u].includes(id)) f[u].push(id);
+      set('favorites', f); alert('Added!');
+    };
+    const remFav = id => {
+      const u = localStorage.getItem('token'), f = get('favorites');
+      f[u] = f[u].filter(x => x !== id); set('favorites', f); renderFavs();
+    };
+    const renderFavs = () => {
+      const u = localStorage.getItem('token'), fIds = get('favorites')[u] || [];
+      render(B.filter(x => fIds.includes(x.id)), 'favoritesGrid', false);
+    };
+    const filter = () => {
+      const q = document.getElementById('globalSearch').value.toLowerCase(), cat = document.getElementById('categoryFilter').value;
+      render(B.filter(x => (cat==='All' || x.c===cat) && (x.t.toLowerCase().includes(q) || x.a.toLowerCase().includes(q))), 'booksGrid');
+    };
+    document.getElementById('loginForm').onsubmit = e => {
+      e.preventDefault(); const em = document.getElementById('email').value, p = document.getElementById('password').value;
+      const u = get('users').find(x => x.email===em && x.password===p);
+      if(u) { localStorage.setItem('token', em); document.getElementById('usernameDisplay').textContent = u.fullName; showPage('homePage'); }
+      else alert('Error');
+    };
+    document.getElementById('registerForm').onsubmit = e => {
+      e.preventDefault(); const n = document.getElementById('fullName').value, em = document.getElementById('regEmail').value, p = document.getElementById('regPassword').value;
+      const us = get('users'); us.push({fullName:n, email:em, password:p}); set('users', us); showPage('loginView');
+    };
+    document.getElementById('logoutBtn').onclick = () => { localStorage.removeItem('token'); showPage('loginView'); };
+    document.getElementById('searchBtn').onclick = () => showPage('booksPage');
+    document.getElementById('categoryFilter').onchange = filter;
+    window.onload = () => localStorage.getItem('token') ? showPage('homePage') : showPage('loginView');
   </script>
 </body>
 </html>
